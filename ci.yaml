@@ -3,13 +3,12 @@ name: $(BuildID)
 trigger:
   branches:
     include:
-    - feat/*
+    - feature/*
     - qa
     - stage
     - fix/*
   paths:
     exclude:
-    - '*.yaml'
     - '*.md'
     - 'backends/*'
     - 'images/*'
