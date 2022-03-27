@@ -17,7 +17,7 @@ stages:
     - template: ../steps/demo-init.yaml
     - bash: |
           # Remember Exit Code
-          set -uo pipefall
+          set -uo pipefail
 
           # Run terraform plan and save output (to be used later for posting to GitHub)
           if terraform plan -detailed-exitcode -input=false -var-file=02-terraform.auto.tfvars -var="client_id=$ARM_CLIENT_ID" \
