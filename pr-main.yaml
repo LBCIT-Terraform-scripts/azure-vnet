@@ -6,7 +6,7 @@ pr:
 - main 
 
 variables:
-- group: terraform-key-vault-cred
+  - group: terraform-key-vault-cred
 
 stages:
   - template: stages/ci.yaml

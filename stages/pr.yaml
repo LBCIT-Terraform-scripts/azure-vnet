@@ -11,7 +11,7 @@ stages:
     displayName: Detecting Drift
     steps: 
 
-
+    # ==============
     # terraform plan
     # =============
 
@@ -64,7 +64,7 @@ stages:
 
 - stage: pullRequestCommentStage
   displayName: Adding Results to Pull Request
-  condition: and(succededorFailed(), eq(variables['Build.Reason'], 'PullRequest'))
+  condition: and(succeededorFailed(), eq(variables['Build.Reason'], 'PullRequest'))
   variables:
     githubRepoName: '$(Build.Repository.Name)'
     githubConnectionName: 'LBCIT-Terraform-scripts'
@@ -82,7 +82,7 @@ stages:
       displayName: Post - No Drift
       inputs:
         gitHubConnection: ${{ variables.githubConnectionName }}
-        reposityName: $(githubRepoName)
+        repositoryName: $(githubRepoName)
         comment: |
           ## &nbsp;No Configuration drift detected
           Source Version: $(Build.SourceVersion)
@@ -94,7 +94,7 @@ stages:
       displayName: Post - Drift Dectected
       inputs:
         gitHubConnection: ${{ variables.githubConnectionName }}
-        reposityName: $(githubRepoName)
+        repositoryName: $(githubRepoName)
         comment: |
           ## &nbsp; Configuration drift detected
           Source Version: $(Build.SourceVersion)
