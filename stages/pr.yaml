@@ -20,7 +20,7 @@ stages:
         set -uo pipefail
 
         # Run `terraform plan` and save output (used later for posting to GitHub)
-        if terraform plan --input=false -var-file=02-terraform.auto.tfvars -var="client_id=$ARM_CLIENT_ID"  -var="client_secret=$ARM_CLIENT_SECRET" -var="tenant_id=$ARM_TENANT_ID"  -var="subscription_id=$ARM_SUBSCRIPTION_ID" \
+        if terraform plan -detailed-exitcode --input=false -var-file=02-terraform.auto.tfvars -var="client_id=$ARM_CLIENT_ID"  -var="client_secret=$ARM_CLIENT_SECRET" -var="tenant_id=$ARM_TENANT_ID"  -var="subscription_id=$ARM_SUBSCRIPTION_ID" \
             | tee plan-output.txt \
             exit ${PIPESTATUS[0]}
         then
@@ -32,7 +32,7 @@ stages:
           echo "##vso[task.setvariable variable=exitCode;isOutput=true]non-zero"
           exit $tf_exit_code
         fi
-        
+
           # # Run `terraform plan` and save output (to be used later for posting to GitHub)
           # if terraform plan -detailed-exitcode -input=false -var-file=02-terraform.auto.tfvars -var="client_id=$ARM_CLIENT_ID" \
           #     -var="client_secret=$ARM_CLIENT_SECRET" \
@@ -48,6 +48,7 @@ stages:
           #   echo "##vso[task.setvariable variable=exitCode;isoutput=true]non-zero"
           #   exit $tf_exit_code
           # fi
+
       displayName: Terraform - Detect Configuration drift
       name: planStep
       env:
@@ -76,7 +77,7 @@ stages:
 
 - stage: pullRequestCommentStage
   displayName: Adding Results to Pull Request
-  condition: and(succeededorFailed(), eq(variables['Build.Reason'], 'PullRequest'))
+  condition: and(succeededorFailed(), eq(variables.isPR, 'True'))
   variables:
     githubRepoName: '$(Build.Repository.Name)'
     githubConnectionName: 'LBCIT-Terraform-scripts'

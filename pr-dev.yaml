@@ -7,6 +7,8 @@ pr:
 
 variables:
 - group: terraform-key-vault-cred
+- template: global-vars/global.yaml
+
 
 stages:
   - template: stages/ci.yaml
