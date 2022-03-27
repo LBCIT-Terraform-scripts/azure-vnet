@@ -1,6 +1,6 @@
 name: $(BuildID)
 
-# Checks regularly for any manual non Infrastructure as Code changes.
+#Checks regularly for any manual non Infrastructure as Code changes.
 
 trigger: none
 pr: none
