@@ -3,7 +3,7 @@ name: $(BuildID)
 # Checks regularly for any manual non Infrastructure as Code changes.
 
 trigger: none
-pr:
+pr: none
 
 schedules:
 - cron "0 0 * * *"
