@@ -3,9 +3,7 @@ name: $(BuildID)
 trigger:
   branches:
     include:
-    - feat/*
-    - qa
-    - stage
+    - feature/*
     - fix/*
   paths:
     exclude:
