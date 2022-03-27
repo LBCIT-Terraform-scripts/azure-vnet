@@ -27,11 +27,11 @@ stages:
               exit ${PIPESTATUS[0]}
           then 
             echo "No Configuration Drift deteced"
-            echo "##vso[task.setvariable variable=exitCode;isOutput=true]zero"
+            echo "##vso[task.setvariable variable=exitCode;isoutput=true]zero"
           else 
             tf_exit_code=$?
-            echo "Configuration Drift Detected"
-            echo "##vso[task.setvariable variable=exitCode;isOutput=true]non-zero"
+            echo "Configuration Drift Detected" 
+            echo "##vso[task.setvariable variable=exitCode;isoutput=true]non-zero"
             exit $tf_exit_code
           fi
       displayName: Terraform - Detect Configuration drift
@@ -43,7 +43,7 @@ stages:
         ARM_TENANT_ID:              $(kv-arm-tenant-id)
         AZDO_ORG_SERVICE_URL:       $(kv-azure-devops-org-url)
         AZDO_PERSONAL_ACCESS_TOKEN: $(kv-azure-devops-pat)
-        
+
   # Save Plan Output
   # ==========
     - publish: ./plan-output.txt
