@@ -1,0 +1,13 @@
+name: $(BuildID)
+
+trigger: none
+
+pr:
+- dev 
+
+variables:
+- group: terraform-key-vault-cred
+
+stages:
+  - template: stages/ci.yaml
+  - template: stages/pr.yaml

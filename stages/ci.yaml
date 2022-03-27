@@ -1,0 +1,22 @@
+stages :
+  - stage: CI_Intergration
+    displayName: CI - Integration
+    jobs:
+    - job: CIJob
+      steps:
+      - task: TerraformInstaller@0
+        displayName: "Install"
+        inputs:
+          terraformVersion: '1.1.0'
+
+      - bash: terraform -version
+        displayName: Terraform Version
+
+      - bash: terraform init -backend=false
+        displayName: Terraform Init
+      
+      - bash: terraform validate
+        displayName: Terraform Validate
+      
+      - bash: terraform fmt 
+        displayName: check format / lint

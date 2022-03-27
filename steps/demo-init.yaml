@@ -1,0 +1,27 @@
+steps:
+- task: TerraformInstaller@0
+  displayName: "Install Terraform"
+  inputs:
+    terraformVersion: '1.1.0'
+
+- bash: |
+    terraform -version
+    terraform init -backend-config="storage_account_name=$TF_STATE_BLOB_ACCOUNT_NAME" \
+      -backend-config="container_name=$TF_STATE_BLOB_CONTAINER_NAME" \
+      -backend-config="key=$TF_STATE_BLOB_FILE" \
+      -backend-config="resource_group_name=$TF_STATE_BLOB_RESOURCE_GROUP" \
+      -backend-config="access_key=$TF_STATE_BLOB_ACCESS_KEY"
+  displayName: Terraforrm Init
+  env:
+    TF_STATE_BLOB_ACCOUNT_NAME: $(kv-tf-state-blob-account)
+    TF_STATE_BLOB_CONTAINER_NAME: $(kv-tf-state-blob-container)
+    TF_STATE_BLOB_FILE: $(kv-tf-state-blob-file)
+    TF_STATE_BLOB_ACCESS_KEY: $(tfstorageaccount-key2)
+    TF_STATE_BLOB_RESOURCE_GROUP: $(kv-tf-state-resource-group)
+  #workingDirectory: '$(Pipeline.Workspace)/s'
+
+- bash: |
+    terraform validate 
+  displayName: "Terraform Validate"
+  #workingDirectory: '$(Pipeline.Workspace)/s'
+

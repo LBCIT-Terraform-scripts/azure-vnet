@@ -1,0 +1,21 @@
+parameters:
+- name: extraFlags
+  type: string
+  default: ""
+
+steps:
+- bash: | 
+    terraform plan -input=false -var-file=02-terraform.auto.tfvars ${{ parameters.extraFlags }}\
+      -var="client_id=$ARM_CLIENT_ID" \
+      -var="client_secret=$ARM_CLIENT_SECRET" \
+      -var="tenant_id=$ARM_TENANT_ID" \
+      -var="subscription_id=$ARM_SUBSCRIPTION_ID"
+  displayName: Terraforrm Plan
+  env:
+    ARM_SUBSCRIPTION_ID:        $(kv-arm-subscription-id)
+    ARM_CLIENT_ID:              $(kv-arm-client-id)
+    ARM_CLIENT_SECRET:          $(kv-arm-client-secret)
+    ARM_TENANT_ID:              $(kv-arm-tenant-id)
+    AZDO_ORG_SERVICE_URL:       $(kv-azure-devops-org-url)
+    AZDO_PERSONAL_ACCESS_TOKEN: $(kv-azure-devops-pat)
+#  workingDirectory: '$(Pipeline.Workspace)/s'

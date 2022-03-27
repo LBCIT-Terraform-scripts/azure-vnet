@@ -1,0 +1,20 @@
+name: $(BuildID)
+
+trigger:
+  branches:
+    include:
+    - feat/*
+    - qa
+    - stage
+    - fix/*
+  paths:
+    exclude:
+    - '*.yaml'
+    - '*.md'
+    - 'backends/*'
+    - 'images/*'
+    - '.github/*'
+    - 'docs/*'
+
+stages:
+- template: stages/ci.yaml

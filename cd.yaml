@@ -1,0 +1,56 @@
+name: $(BuildID)
+
+trigger:
+  branches:
+    include:
+    - main
+    - dev
+  paths:
+    exclude:
+    - '*.yaml'
+    - '*.md'
+    - 'backends/*'
+    - 'images/*'
+    - '.github/*'
+    - 'docs/*'
+
+pr: none
+
+variables:
+- group: terraform-key-vault-cred
+
+# Conditional uses ${{ }} syntax in order to be processed at compile time
+# in order to work for loading variable groups. For details see:
+# # https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#understand-variable-syntax
+# - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+#   - group: 
+
+# - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+#   - group: 
+
+
+stages:
+- template: stages/ci.yaml
+
+- stage:
+  displayName: CD - Deployment
+  jobs:
+  - job: deploy
+    displayName: Terrform Plan and Apply
+    steps:
+    - template: steps/demo-init.yaml
+    - template: steps/demo-plan.yaml
+      parameters:
+        extraFlags: "-out=$(Build.BuildId).tfplan"
+  
+  - bash: terraform apply $(Build.BuildId).tfplan
+    displayName: Terraforrm Apply
+    env:
+      ARM_SUBSCRIPTION_ID:        $(kv-arm-subscription-id)
+      ARM_CLIENT_ID:              $(kv-arm-client-id)
+      ARM_CLIENT_SECRET:          $(kv-arm-client-secret)
+      ARM_TENANT_ID:              $(kv-arm-tenant-id)
+      AZDO_ORG_SERVICE_URL:       $(kv-azure-devops-org-url)
+      AZDO_PERSONAL_ACCESS_TOKEN: $(kv-azure-devops-pat)
+   # workingDirectory: '$(Pipeline.Workspace)/s'
+
