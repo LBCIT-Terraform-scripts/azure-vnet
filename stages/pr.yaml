@@ -19,7 +19,7 @@ stages:
           # Remember Exit Code
           set -uo pipefail
 
-          # Run terraform plan and save output (to be used later for posting to GitHub)
+          # Run `terraform plan` and save output (to be used later for posting to GitHub)
           if terraform plan -detailed-exitcode -input=false -var-file=02-terraform.auto.tfvars -var="client_id=$ARM_CLIENT_ID" \
               -var="client_secret=$ARM_CLIENT_SECRET" \
               -var="tenant_id=$ARM_TENANT_ID" \
@@ -43,9 +43,7 @@ stages:
         ARM_TENANT_ID:              $(kv-arm-tenant-id)
         AZDO_ORG_SERVICE_URL:       $(kv-azure-devops-org-url)
         AZDO_PERSONAL_ACCESS_TOKEN: $(kv-azure-devops-pat)
-  
-    - bash: |
-          echo "$(exitCode)"
+        
   # Save Plan Output
   # ==========
     - publish: ./plan-output.txt
