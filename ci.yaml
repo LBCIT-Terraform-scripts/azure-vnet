@@ -13,6 +13,8 @@ trigger:
     - 'images/*'
     - '.github/*'
     - 'docs/*'
+  
+pr: none
 
 stages:
 - template: stages/ci.yaml

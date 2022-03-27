@@ -15,7 +15,7 @@ stages:
     # terraform plan
     # =============
 
-    - template: ../azure-pipelines/steps/demo-init.yaml
+    - template: ../steps/demo-init.yaml
     - bash: |
           # Remember Exit Code
           set -uo pipefall
@@ -51,7 +51,7 @@ stages:
     - publish: ./plan-output.txt
       artifact: terraformPlanOutput
       displayName: Save 'terraform plan' output
-      conditon: succeededorFailed()
+      condition: succeededorFailed()
   # - task: PublishPipelineArtifact@1
   #   displayName: Save 'terraform plan' output
   #   inputs:
