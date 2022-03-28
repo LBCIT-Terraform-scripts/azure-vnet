@@ -43,10 +43,8 @@ stages:
         AZDO_PERSONAL_ACCESS_TOKEN: $(kv-azure-devops-pat)
 
     - bash: |
-          echo "$exitCode"
+          echo "$(planStep.exitCode)
 
-    - bash: |
-          echo $exitCode
   # Save Plan Output
   # ==========
     - publish: ./plan-output.txt
