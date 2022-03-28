@@ -27,12 +27,11 @@ stages:
           echo "No configuration drift detected" \
           echo "##vso[task.setvariable variable=exitCode;isOutput=true]zero"
         else
-          tf_exit_code=$?
+          #tf_exit_code=$?
           echo "##vso[task.setvariable variable=exitCode;isOutput=true]non-zero"
           echo "Configuration drift detected" 
-          exit $tf_exit_code
+        #  exit $tf_exit_code
         fi
-
       displayName: Terraform - Detect Configuration drift
       name: planStep
       env:
