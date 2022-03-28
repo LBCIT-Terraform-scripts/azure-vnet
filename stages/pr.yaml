@@ -24,30 +24,14 @@ stages:
             | tee plan-output.txt \
             exit ${PIPESTATUS[0]}
         then
-          echo "🟢 No configuration drift detected"
+          echo "No configuration drift detected"
           echo "##vso[task.setvariable variable=exitCode;isOutput=true]zero"
         else
           tf_exit_code=$?
-          echo "⚠️ Configuration drift detected"
-          echo "##vso[task.setvariable variable=exitCode;isOutput=true]non-zero"
+          echo "Configuration drift detected"
+          echo `"##vso[task.setvariable variable=exitCode;isOutput=true]non-zero"`
           exit $tf_exit_code
         fi
-
-          # # Run `terraform plan` and save output (to be used later for posting to GitHub)
-          # if terraform plan -detailed-exitcode -input=false -var-file=02-terraform.auto.tfvars -var="client_id=$ARM_CLIENT_ID" \
-          #     -var="client_secret=$ARM_CLIENT_SECRET" \
-          #     -var="tenant_id=$ARM_TENANT_ID" \
-          #     -var="subscription_id=$ARM_SUBSCRIPTION_ID" | tee plan-output.txt \
-          #     exit ${PIPESTATUS[0]}
-          # then 
-          #   echo "No Configuration Drift deteced"
-          #   echo "##vso[task.setvariable variable=exitCode;isoutput=true]zero"
-          # else 
-          #   tf_exit_code=$?
-          #   echo "Configuration Drift Detected" 
-          #   echo "##vso[task.setvariable variable=exitCode;isoutput=true]non-zero"
-          #   exit $tf_exit_code
-          # fi
 
       displayName: Terraform - Detect Configuration drift
       name: planStep
@@ -65,6 +49,7 @@ stages:
       artifact: terraformPlanOutput
       displayName: Save 'terraform plan' output
       condition: succeededorFailed()
+      
   # - task: PublishPipelineArtifact@1
   #   displayName: Save 'terraform plan' output
   #   inputs:
