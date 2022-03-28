@@ -18,7 +18,7 @@ variables:
 - group: terraform-key-vault-cred
 
 steps:
-- template: steps/confirm-kv-load.yaml
+#- template: steps/confirm-kv-load.yaml
 - template: steps/demo-init.yaml
 - template: steps/demo-plan.yaml
   parameters:
