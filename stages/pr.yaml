@@ -44,9 +44,9 @@ stages:
 
     - bash: |
           echo "$exitCode"
-          
+
     - bash: |
-      echo $exitCode
+          echo $exitCode
   # Save Plan Output
   # ==========
     - publish: ./plan-output.txt
