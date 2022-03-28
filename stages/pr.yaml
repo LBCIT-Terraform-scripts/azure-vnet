@@ -43,13 +43,19 @@ stages:
         AZDO_PERSONAL_ACCESS_TOKEN: $(kv-azure-devops-pat)
 
     - bash: |
-          echo "$(planStep.exitCode)
+          echo "$(planStep.exitCode)"
+          echo "$(planStep.exitCode)" >>  ./exitCode.txt
 
   # Save Plan Output
   # ==========
     - publish: ./plan-output.txt
       artifact: terraformPlanOutput
       displayName: Save 'terraform plan' output
+      condition: succeededorFailed()
+    
+    - publish: ./exitCode.txt
+      artifact: terraformexitCode
+      displayName: Save 'terraform exit code' output
       condition: succeededorFailed()
       
   # - task: PublishPipelineArtifact@1
@@ -74,6 +80,20 @@ stages:
     displayName: Post to GitHub
     steps:
     
+
+      # Download the artifacts
+    - download: current
+      artifact: terraformexitCode
+
+    # Read the variable from the file, then expose it in the job
+    - bash: |
+        exitCode=$(cat $(Pipeline.Workspace)/terraformexitCode/exitCode.txt)
+        echo "##vso[task.setvariable variable=exitCode]$exitCode"
+
+
+    - bash: | 
+        echo "$(exitCode)"
+
     # Add Comment - No Drift
     # =====================
     
