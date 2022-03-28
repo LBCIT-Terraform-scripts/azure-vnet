@@ -19,8 +19,8 @@ variables:
 
 steps:
 - template: steps/confirm-kv-load.yaml
-- template: steps/terraform-init.yaml
-- template: steps/terraform-plan.yaml
+- template: steps/demo-init.yaml
+- template: steps/demo-plan.yaml
   parameters:
     extraFlags: -detailed-exitcode # Drift Detection
 
