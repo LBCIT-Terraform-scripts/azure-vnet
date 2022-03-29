@@ -16,7 +16,7 @@ trigger:
 
 
 variables:
-- template: vars/global-vars.yaml
+- template: global-vars/global.yaml
 
 pr: none
 
