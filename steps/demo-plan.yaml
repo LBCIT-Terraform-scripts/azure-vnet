@@ -5,7 +5,7 @@ parameters:
 
 steps:
 - bash: | 
-    terraform plan -input=false -var-file=02-terraform.auto.tfvars ${{ parameters.extraFlags }}\
+    terraform plan -input=false -var-file=c2-terraform.auto.tfvars ${{ parameters.extraFlags }}\
       -var="client_id=$ARM_CLIENT_ID" \
       -var="client_secret=$ARM_CLIENT_SECRET" \
       -var="tenant_id=$ARM_TENANT_ID" \
