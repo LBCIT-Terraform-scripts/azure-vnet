@@ -17,7 +17,7 @@ schedules:
 variables:
 - group: terraform-key-vault-cred
 
-stages:
+steps:
 - template: steps/demo-init.yaml
 - template: steps/demo-plan.yaml
   parameters:
