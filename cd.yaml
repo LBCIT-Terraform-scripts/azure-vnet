@@ -14,11 +14,10 @@ trigger:
     - '.github/*'
     - 'docs/*'
 
+pr: none
 
 variables:
 - template: global-vars/global.yaml
-
-pr: none
 
 # Conditional uses ${{ }} syntax in order to be processed at compile time
 # in order to work for loading variable groups. For details see:
