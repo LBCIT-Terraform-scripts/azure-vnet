@@ -14,7 +14,9 @@ trigger:
     - '.github/*'
     - 'docs/*'
 
-    
+
+variables:
+- template: vars/global-vars.yaml
 
 pr: none
 
@@ -23,7 +25,6 @@ pr: none
 # # https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#understand-variable-syntax
 - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/dev') }}:
   - group: terraform-key-vault-cred
-
 - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
   - group: prod-demo-key-vault-cred
 
