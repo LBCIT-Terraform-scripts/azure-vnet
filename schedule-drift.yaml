@@ -6,8 +6,8 @@ trigger: none
 pr: none
 
 schedules:
-- cron: "5 * * * *"
-  displayName: Daily Midnight Build
+- cron: "*/5 * * * *"
+  displayName: Daily 5mins Build
   branches:
     include:
     - main
