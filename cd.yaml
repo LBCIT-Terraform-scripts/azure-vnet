@@ -18,7 +18,6 @@ pr: none
 
 variables:
 - template: global-vars/global.yaml
-
 # Conditional uses ${{ }} syntax in order to be processed at compile time
 # in order to work for loading variable groups. For details see:
 # # https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#understand-variable-syntax
