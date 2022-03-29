@@ -90,7 +90,7 @@ stages:
         exitCode=$(cat $(Pipeline.Workspace)/terraformexitCode/exitCode.txt)
         echo "##vso[task.setvariable variable=exitCode]$exitCode"
 
-
+  # display the exitcode status
     - bash: | 
         echo "$(exitCode)"
 

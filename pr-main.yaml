@@ -3,7 +3,7 @@ name: $(BuildID)
 trigger: none
 
 pr:
-- main 
+- master
 
 variables:
   - group: terraform-key-vault-cred
