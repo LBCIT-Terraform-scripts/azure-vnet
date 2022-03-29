@@ -43,15 +43,15 @@ stages:
       parameters:
         extraFlags: "-out=$(Build.BuildId).tfplan"
   
-  - bash: | 
-        terraform apply $(Build.BuildId).tfplan
-    displayName: Terraforrm Apply
-    env:
-      ARM_SUBSCRIPTION_ID:        $(kv-arm-subscription-id)
-      ARM_CLIENT_ID:              $(kv-arm-client-id)
-      ARM_CLIENT_SECRET:          $(kv-arm-client-secret)
-      ARM_TENANT_ID:              $(kv-arm-tenant-id)
-      AZDO_ORG_SERVICE_URL:       $(kv-azure-devops-org-url)
-      AZDO_PERSONAL_ACCESS_TOKEN: $(kv-azure-devops-pat)
-   # workingDirectory: '$(Pipeline.Workspace)/s'
+    - bash: | 
+          terraform apply $(Build.BuildId).tfplan
+      displayName: Terraforrm Apply
+      env:
+        ARM_SUBSCRIPTION_ID:        $(kv-arm-subscription-id)
+        ARM_CLIENT_ID:              $(kv-arm-client-id)
+        ARM_CLIENT_SECRET:          $(kv-arm-client-secret)
+        ARM_TENANT_ID:              $(kv-arm-tenant-id)
+        AZDO_ORG_SERVICE_URL:       $(kv-azure-devops-org-url)
+        AZDO_PERSONAL_ACCESS_TOKEN: $(kv-azure-devops-pat)
+    # workingDirectory: '$(Pipeline.Workspace)/s'
 
