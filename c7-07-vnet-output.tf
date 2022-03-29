@@ -49,3 +49,8 @@ output "bastion_subnet_ID" {
   value       = azurerm_subnet.bastion_subnet.id
   description = "Bastion Subnet ID"
 }
+
+
+output "test_location" {
+  value = azurerm_network_security_group.db_nsg.location
+}
