@@ -13,6 +13,17 @@ terraform {
   }
 }
 
+
+
+backend "azurerm" {
+    # container_name = "tfstatefiles"
+    # key = "project-1-canadacentral-terraform.tfstate"
+    # storage_account_name = "terraformstatecanada"
+    # resource_group_name = "terraform-remote-storage-rg"
+    # sas_token = ""
+  }
+
+
 # Provider Block
 provider "azurerm" {
   features {}
