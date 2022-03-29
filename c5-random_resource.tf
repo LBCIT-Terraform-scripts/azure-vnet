@@ -5,3 +5,6 @@ resource "random_string" "my_random" {
   upper   = false
   number  = false
 }
+
+
+# testing out the resource trigger
