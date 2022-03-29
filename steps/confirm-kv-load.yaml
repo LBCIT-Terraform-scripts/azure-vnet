@@ -10,4 +10,6 @@ steps:
       exit 1
     else
       echo " Key Vault loaded"
-      
+  displayName: Debug - Key Vault Loaded
+  env: 
+      KV_DEBUG_ENV: $(kv-debug-env)
