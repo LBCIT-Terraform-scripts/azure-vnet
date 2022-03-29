@@ -1,4 +1,4 @@
-# Virtual Network, Subnets and Subnet NSG's
+# Virtual Network, Subnets and Subnet NSG's  
 
 # Virtual Network
 variable "vnet_name" {
