@@ -43,7 +43,8 @@ stages:
       parameters:
         extraFlags: "-out=$(Build.BuildId).tfplan"
   
-  - bash: terraform apply $(Build.BuildId).tfplan
+  - bash: | 
+        terraform apply $(Build.BuildId).tfplan
     displayName: Terraforrm Apply
     env:
       ARM_SUBSCRIPTION_ID:        $(kv-arm-subscription-id)

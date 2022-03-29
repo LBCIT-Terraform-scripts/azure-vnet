@@ -6,7 +6,7 @@ trigger: none
 pr: none
 
 schedules:
-- cron: "1 * * * *"
+- cron: "5 * * * *"
   displayName: Daily Midnight Build
   branches:
     include:
@@ -17,7 +17,7 @@ schedules:
 variables:
 - group: terraform-key-vault-cred
 
-steps:
+stages:
 - template: steps/demo-init.yaml
 - template: steps/demo-plan.yaml
   parameters:
