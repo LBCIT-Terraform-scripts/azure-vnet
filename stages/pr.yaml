@@ -3,7 +3,6 @@ stages:
 # ===============
 #  Detect Drift
 # ==============
-
 - stage: terraformstage
   displayName: Detect Drift
   jobs:
@@ -11,30 +10,28 @@ stages:
     displayName: Detecting Drift
     steps: 
 
+    # ==============
     # terraform plan
     # =============
 
-    - template: ../azure-pipelines/steps/demo-init.yaml
+    - template: ../steps/demo-init.yaml
     - bash: |
-      # Remember Exit Code
-      set -uo pipefall
-
-      # Run terraform plan and save output (to be used later for posting to GitHub)
-      if terraform plan -detailed-exitcode -input=false -var-file=02-terraform.auto.tfvars -var="client_id=$ARM_CLIENT_ID" \
-          -var="client_secret=$ARM_CLIENT_SECRET" \
-          -var="tenant_id=$ARM_TENANT_ID" \
-          -var="subscription_id=$ARM_SUBSCRIPTION_ID"\
-          | tee plan-output.txt \
-          exit ${PIPESTATUS[0]}
-      then 
-        echo "No Configuration Drift deteced"
-        echo "##vso[task.setvariable variable=exitCode;isOutput=true]zero"
-      else 
-        tf_exit_code=$?
-        echo " Configuration Drift Detected"
-        echo "##vso[task.setvariable variable=exitCode;isOutput=true]non-zero"
-        exit $tf_exit_code
-      fi
+        # Remember Exit Code
+        set -uo pipefail
+        exitCode=" "
+        # Run `terraform plan` and save output (used later for posting to GitHub)
+        if terraform plan -detailed-exitcode --input=false -var-file=02-terraform.auto.tfvars -var="client_id=$ARM_CLIENT_ID"  -var="client_secret=$ARM_CLIENT_SECRET" -var="tenant_id=$ARM_TENANT_ID"  -var="subscription_id=$ARM_SUBSCRIPTION_ID" \
+            | tee plan-output.txt \
+            exit ${PIPESTATUS[0]}
+        then
+          echo "No configuration drift detected" \
+          echo "##vso[task.setvariable variable=exitCode;isOutput=true]zero"
+        else
+          #tf_exit_code=$?
+          echo "##vso[task.setvariable variable=exitCode;isOutput=true]non-zero"
+          echo "Configuration drift detected" 
+        #  exit $tf_exit_code
+        fi
       displayName: Terraform - Detect Configuration drift
       name: planStep
       env:
@@ -44,13 +41,23 @@ stages:
         ARM_TENANT_ID:              $(kv-arm-tenant-id)
         AZDO_ORG_SERVICE_URL:       $(kv-azure-devops-org-url)
         AZDO_PERSONAL_ACCESS_TOKEN: $(kv-azure-devops-pat)
-  
+
+    - bash: |
+          echo "$(planStep.exitCode)"
+          echo "$(planStep.exitCode)" >>  ./exitCode.txt
+
   # Save Plan Output
   # ==========
     - publish: ./plan-output.txt
       artifact: terraformPlanOutput
       displayName: Save 'terraform plan' output
-      conditon: succeededorFailed()
+      condition: succeededorFailed()
+    
+    - publish: ./exitCode.txt
+      artifact: terraformexitCode
+      displayName: Save 'terraform exit code' output
+      condition: succeededorFailed()
+      
   # - task: PublishPipelineArtifact@1
   #   displayName: Save 'terraform plan' output
   #   inputs:
@@ -63,16 +70,30 @@ stages:
 
 - stage: pullRequestCommentStage
   displayName: Adding Results to Pull Request
-  condition: and(succededorFailed(), eq(variables['Build.Reason'], 'PullRequest'))
+  condition: and(succeededorFailed(), eq(variables.isPR, 'True'))
   variables:
     githubRepoName: '$(Build.Repository.Name)'
     githubConnectionName: 'LBCIT-Terraform-scripts'
-    exitCode: $[ stageDependencies.terraformStage.terraformJob.outputs['planStep']]
+    exitCode: $[ stageDependencies.terraformStage.terraformJob.outputs['planStep.exitCode']]
   jobs:
   - job: postCommentJob
     displayName: Post to GitHub
     steps:
     
+
+      # Download the artifacts
+    - download: current
+      artifact: terraformexitCode
+
+    # Read the variable from the file, then expose it in the job
+    - bash: |
+        exitCode=$(cat $(Pipeline.Workspace)/terraformexitCode/exitCode.txt)
+        echo "##vso[task.setvariable variable=exitCode]$exitCode"
+
+  # display the exitcode status
+    - bash: | 
+        echo "$(exitCode)"
+
     # Add Comment - No Drift
     # =====================
     
@@ -81,7 +102,7 @@ stages:
       displayName: Post - No Drift
       inputs:
         gitHubConnection: ${{ variables.githubConnectionName }}
-        reposityName: $(githubRepoName)
+        repositoryName: $(githubRepoName)
         comment: |
           ## &nbsp;No Configuration drift detected
           Source Version: $(Build.SourceVersion)
@@ -93,7 +114,7 @@ stages:
       displayName: Post - Drift Dectected
       inputs:
         gitHubConnection: ${{ variables.githubConnectionName }}
-        reposityName: $(githubRepoName)
+        repositoryName: $(githubRepoName)
         comment: |
           ## &nbsp; Configuration drift detected
           Source Version: $(Build.SourceVersion)

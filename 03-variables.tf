@@ -18,3 +18,4 @@ variable "client_secret" {
   type        = string
   description = "Enter your client_secret"
 }
+

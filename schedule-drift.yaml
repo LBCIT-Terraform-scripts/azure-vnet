@@ -1,26 +1,25 @@
 name: $(BuildID)
 
-# Checks regularly for any manual non Infrastructure as Code changes.
+#Checks regularly for any manual non Infrastructure as Code changes.
 
 trigger: none
-pr:
+pr: none
 
 schedules:
-- cron "0 0 * * *"
+- cron: "5 * * * *"
   displayName: Daily Midnight Build
-  always: true
   branches:
     include:
     - main
     - dev
+  always: true
 
 variables:
 - group: terraform-key-vault-cred
 
-steps:
-- template: steps/confirm-kv-loaded.yaml
-- template: steps/terraform-init.yaml
-- template: steps/terraform-plan.yaml
+stages:
+- template: steps/demo-init.yaml
+- template: steps/demo-plan.yaml
   parameters:
     extraFlags: -detailed-exitcode # Drift Detection
 
