@@ -16,17 +16,14 @@ trigger:
 
 pr: none
 
-variables:
-- group: terraform-key-vault-cred
-
 # Conditional uses ${{ }} syntax in order to be processed at compile time
 # in order to work for loading variable groups. For details see:
 # # https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#understand-variable-syntax
-# - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-#   - group: 
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/dev') }}:
+  - group: terraform-key-vault-cred
 
-# - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-#   - group: 
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
+  - group: prod-demo-key-vault-cred
 
 
 stages:
