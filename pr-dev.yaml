@@ -13,3 +13,7 @@ variables:
 stages:
   - template: stages/ci.yaml
   - template: stages/pr.yaml
+  - template: stages/add-git-tag.yaml
+    parameters:
+      tagFormat: GitVersion.SemVer
+      tagDescription: "feature to devolopment Branch"

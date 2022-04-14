@@ -1,0 +1,36 @@
+parameters:
+  - name: tagFormat
+    type: string
+  - name: tagDescription
+    type: string
+
+stages: 
+# ===============
+#  Change build number and adding git tags
+# ==============
+- stage: Tagstage
+  displayName: Adding Git Tag
+  jobs:
+  - job: TagJob
+    displayName: Adding Git Tag
+    steps: 
+      - checkout: self
+        persistCredentials: true
+    - task: gitversion/setup@0
+      inputs:
+        versionSpec: '5.x'
+    - task: gitversion/execute@0
+      inputs:
+        useConfigFile: true
+        configFilePath: 'GitVersion.yml'
+        
+      - task: Bash@3
+        displayName: "Create tag"
+        name: "create_tag"
+        inputs:
+          targetType: "inline"
+          script: |
+            git config --global user.name "BuildService"
+            git config --global user.email "buildservice@pipeline.com"
+            git tag -a ${{ parameters.tagFormat }} -m ${{ parameters.tagDescription }}
+            git push --tags

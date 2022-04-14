@@ -79,8 +79,6 @@ stages:
   - job: postCommentJob
     displayName: Post to GitHub
     steps:
-    
-
       # Download the artifacts
     - download: current
       artifact: terraformexitCode
@@ -120,3 +118,5 @@ stages:
           Source Version: $(Build.SourceVersion)
           Approving this Pull Request may result in destructive changes to your Azure resources. Please review the `terraform plan` output diff at Azure Pipelines Build Result Page.
           Proceed with caution!
+      
+
