@@ -6,10 +6,14 @@ pr:
 - dev 
 
 variables:
-- group: terraform-key-vault-cred
-- template: global-vars/global.yaml
+  - group: terraform-key-vault-cred
+  - template: global-vars/global.yaml
 
 
 stages:
   - template: stages/ci.yaml
   - template: stages/pr.yaml
+  - template: stages/add-git-tag.yaml
+    # parameters:
+    #   #tagFormat: 'GitVersion.PreReleaseTag'
+    #   tagDescription: "feature to development Branch"

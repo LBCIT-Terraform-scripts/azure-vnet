@@ -1,4 +1,7 @@
 variables:
     isPR: ${{ eq(variables['Build.Reason'], 'PullRequest')  }} 
-    isMain: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
+    isMaster: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/master') }}
     isTag:  ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
+    isFork: ${{ eq(variables['System.PullRequest.IsFork'], 'True') }}
+    isScheduled: ${{ eq(variables['Build.Reason'], 'Schedule') }}
+    isTrustedCI:   ${{ and( eq(variables.isFork,'False'), eq(variables.isPR,'False'), eq(variables.isScheduled,'False') ) }}
