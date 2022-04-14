@@ -1,6 +1,6 @@
 parameters:
-  - name: tagFormat
-    type: string
+  # - name: tagFormat
+  #   type: string
   - name: tagDescription
     type: string
 
@@ -13,6 +13,8 @@ stages:
   jobs:
   - job: TagJob
     displayName: Adding Git Tag
+    variables:
+        GitVersion.PreReleaseTag: ''
     steps: 
     - checkout: self
       persistCredentials: true
@@ -29,8 +31,10 @@ stages:
       name: "create_tag"
       inputs:
         targetType: "inline"
+        versioningScheme: byEnvVar
+        versionEnvVar: 'GitVersion.PreReleaseTag'
         script: |
               git config --global user.name "BuildService"
               git config --global user.email "buildservice@pipeline.com"
-              git tag -a ${{ parameters.tagFormat }} -m ${{ parameters.tagDescription }}
+              git tag -a $(GitVersion.PreReleaseTag) -m ${{ parameters.tagDescription }}
               git push --tags
