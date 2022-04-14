@@ -14,8 +14,8 @@ stages:
   - job: TagJob
     displayName: Adding Git Tag
     steps: 
-      - checkout: self
-        persistCredentials: true
+    - checkout: self
+      persistCredentials: true
     - task: gitversion/setup@0
       inputs:
         versionSpec: '5.x'
@@ -23,14 +23,14 @@ stages:
       inputs:
         useConfigFile: true
         configFilePath: 'GitVersion.yml'
-        
-      - task: Bash@3
-        displayName: "Create tag"
-        name: "create_tag"
-        inputs:
-          targetType: "inline"
-          script: |
-            git config --global user.name "BuildService"
-            git config --global user.email "buildservice@pipeline.com"
-            git tag -a ${{ parameters.tagFormat }} -m ${{ parameters.tagDescription }}
-            git push --tags
+
+    - task: Bash@3
+      displayName: "Create tag"
+      name: "create_tag"
+      inputs:
+        targetType: "inline"
+        script: |
+          git config --global user.name "BuildService"
+          git config --global user.email "buildservice@pipeline.com"
+          git tag -a ${{ parameters.tagFormat }} -m ${{ parameters.tagDescription }}
+          git push --tags
