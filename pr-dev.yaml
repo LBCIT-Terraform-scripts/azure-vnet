@@ -14,6 +14,6 @@ stages:
   - template: stages/ci.yaml
   - template: stages/pr.yaml
   - template: stages/add-git-tag.yaml
-    parameters:
-      #tagFormat: 'GitVersion.PreReleaseTag'
-      tagDescription: "feature to development Branch"
+    # parameters:
+    #   #tagFormat: 'GitVersion.PreReleaseTag'
+    #   tagDescription: "feature to development Branch"

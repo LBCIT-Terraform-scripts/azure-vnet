@@ -26,15 +26,23 @@ stages:
         useConfigFile: true
         configFilePath: 'GitVersion.yml'
 
-    - task: Bash@3
-      displayName: "Create tag"
-      name: "create_tag"
+
+    - task: GitTag@6
       inputs:
-        targetType: "inline"
-        versioningScheme: byEnvVar
-        versionEnvVar: 'GitVersion.PreReleaseTag'
-        script: |
-              # git config --global user.name "BuildService"
-              # git config --global user.email "buildservice@pipeline.com"
-              git tag -a $(GitVersion.PreReleaseTag) -m ${{ parameters.tagDescription }}
-              git push --tags
+        workingdir: '$(SYSTEM.DEFAULTWORKINGDIRECTORY)'
+        tagUser: 'Build-service'
+        tagEmail: 'buildservice@pipeline.com'
+        tag: 'Test-$(build.buildNumber)'
+
+    # - task: Bash@3
+    #   displayName: "Create tag"
+    #   name: "create_tag"
+    #   inputs:
+    #     targetType: "inline"
+    #     versioningScheme: byEnvVar
+    #     versionEnvVar: 'GitVersion.PreReleaseTag'
+    #     script: |
+    #           git config --global user.name "BuildService"
+    #           git config --global user.email "buildservice@pipeline.com"
+    #           git tag -a $(GitVersion.PreReleaseTag) -m ${{ parameters.tagDescription }}
+    #           git push --tags
