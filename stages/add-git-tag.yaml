@@ -1,6 +1,6 @@
 parameters:
-  - name: tagFormat
-    type: string
+  # - name: tagFormat
+  #   type: string
   - name: tagDescription
     type: string
 
@@ -32,5 +32,5 @@ stages:
         script: |
           git config --global user.name "BuildService"
           git config --global user.email "buildservice@pipeline.com"
-          git tag -a ${{ parameters.tagFormat }} -m ${{ parameters.tagDescription }}
+          git tag -a GitVersion.PreReleaseTag -m ${{ parameters.tagDescription }}
           git push --tags
